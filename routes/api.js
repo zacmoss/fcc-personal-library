@@ -95,10 +95,13 @@ module.exports = function (app) {
         
         try {
           collection.findOne({_id: ObjectId(bookid)}, function(err, doc) {
+            //if (err) console.log(err);
+            // could try catch here
             res.send(doc);
           });
         } catch (e) {
-          console.log(e);
+          //console.log('no book exists');
+          res.send('no book exists');
         }
         
       });
