@@ -36,10 +36,13 @@ module.exports = function (app) {
       }
       MongoClient.connect(MONGODB_CONNECTION_STRING, { useNewUrlParser: true }, function(err, db) {
         try {
-        db.collection.insertOne(book);
+          db.collection('books').insert(book, function(err, doc) {
+              res.send(book);
+              console.log(doc);
+          });
         } catch (e) {
           console.log('error with insertion: ' + e);
-      }
+        }
       });
     })
     
