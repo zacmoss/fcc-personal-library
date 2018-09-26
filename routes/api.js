@@ -92,17 +92,27 @@ module.exports = function (app) {
       MongoClient.connect(MONGODB_CONNECTION_STRING, { useNewUrlParser: true }, function(err, db) {
         let dbo = db.db("fcc-cert6-project3");
         let collection = dbo.collection('books');
-        
+        //console.log(bookid);
+        collection.find({_id: ObjectId(bookid)}, function(err, doc) {
+          if (err) console.log('there is an error');
+          console.log(doc);
+        });
+        /*
         try {
           collection.findOne({_id: ObjectId(bookid)}, function(err, doc) {
             //if (err) console.log(err);
             // could try catch here
-            res.send(doc);
+            try {
+              res.send(doc);
+            } catch (e) {
+              console.log('error');
+            }
           });
         } catch (e) {
           //console.log('no book exists');
           res.send('no book exists');
         }
+        */
         
       });
     })

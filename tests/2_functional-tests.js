@@ -66,8 +66,6 @@ suite('Functional Tests', function() {
           .end(function(err, res){
             assert.equal(res.status, 200);
             assert.equal(res.text, 'Please enter book title');
-            assert.equal(res.body.comments, []);
-            assert.equal(res.body.title, 'A Book');
             done();
           });
           //done();
@@ -79,6 +77,13 @@ suite('Functional Tests', function() {
     suite('GET /api/books => array of books', function(){
       
       test('Test GET /api/books',  function(done){
+        chai.request(server)
+          .get('/api/books')
+          .end(function(err, res){
+            assert.equal(res.status, 200);
+            assert.isArray(res.body, 'response should be an array');
+            done();
+          });
         //done();
       });      
       
@@ -88,6 +93,13 @@ suite('Functional Tests', function() {
     suite('GET /api/books/[id] => book object with [id]', function(){
       
       test('Test GET /api/books/[id] with id not in db',  function(done){
+       chai.request(server)
+        .get('/api/books/5babf254ae0e3313a4d1b779')
+        .end(function(err, res){
+          assert.equal(res.status, 200);
+          assert.isArray(res.body, 'response should be an array');
+          done();
+        });
         //done();
       });
       
