@@ -97,7 +97,7 @@ suite('Functional Tests', function() {
         .get('/api/books/5babf254ae0e3313a4d1b779')
         .end(function(err, res){
           assert.equal(res.status, 200);
-          assert.isArray(res.body, 'response should be an array');
+          assert.equal(res.text, "book doesn't ex);
           done();
         });
         //done();

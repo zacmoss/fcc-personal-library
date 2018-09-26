@@ -93,9 +93,14 @@ module.exports = function (app) {
         let dbo = db.db("fcc-cert6-project3");
         let collection = dbo.collection('books');
         //console.log(bookid);
-        collection.find({_id: ObjectId(bookid)}, function(err, doc) {
-          if (err) console.log('there is an error');
-          console.log(doc);
+        collection.findOne({_id: ObjectId(bookid)}, function(err, doc) {
+          //console.log(doc);
+          if (!doc) {
+            res.send('error');
+          } else {
+            res.send(doc);
+          }
+          
         });
         /*
         try {
