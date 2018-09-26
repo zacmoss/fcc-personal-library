@@ -70,11 +70,26 @@ module.exports = function (app) {
     });
 
 
-
+///api/books/5babc6a6c442351f923b3a8c - test book 8
   app.route('/api/books/:id')
+    // should work
     .get(function (req, res){
       var bookid = req.params.id;
       //json res format: {"_id": bookid, "title": book_title, "comments": [comment,comment,...]}
+    
+      MongoClient.connect(MONGODB_CONNECTION_STRING, { useNewUrlParser: true }, function(err, db) {
+        let dbo = db.db("fcc-cert6-project3");
+        let collection = dbo.collection('books');
+        
+        try {
+          collection.findOne({_id: ObjectId(bookid)}, function(err, doc) {
+            res.send(doc);
+          });
+        } catch (e) {
+          console.log(e);
+        }
+        
+      });
     })
     
     //works
@@ -104,6 +119,7 @@ module.exports = function (app) {
       });
     })
     
+    // should work, won't test until functional tests
     .delete(function(req, res){
       var bookid = req.params.id;
       //if successful response will be 'delete successful'
