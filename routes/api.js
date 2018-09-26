@@ -36,7 +36,7 @@ module.exports = function (app) {
         title: title
       }
       MongoClient.connect(MONGODB_CONNECTION_STRING, { useNewUrlParser: true }, function(err, db) {
-        var dbo = db.db("fcc-cert6-project3");
+        let dbo = db.db("fcc-cert6-project3");
         //if (!dbo.collection('books')) dbo.createCollection('books');
         let collection = dbo.collection('books');
         try {
@@ -53,6 +53,19 @@ module.exports = function (app) {
     
     .delete(function(req, res){
       //if successful response will be 'complete delete successful'
+      MongoClient.connect(MONGODB_CONNECTION_STRING, { useNewUrlParser: true }, function(err, db) {
+        let dbo = db.db("fcc-cert6-project2");
+        let collection = dbo.collection('books');
+
+        try {
+          collection.remove();
+          res.send('complete delete successful');
+        } catch (e) {
+          console.log(e);
+          res.send('Book not deleted.');
+        }
+        
+      });
     });
 
 
@@ -72,6 +85,22 @@ module.exports = function (app) {
     .delete(function(req, res){
       var bookid = req.params.id;
       //if successful response will be 'delete successful'
+      MongoClient.connect(MONGODB_CONNECTION_STRING, { useNewUrlParser: true }, function(err, db) {
+        let dbo = db.db("fcc-cert6-project2");
+        let collection = dbo.collection('books');
+
+        if (bookid) {
+          try {
+            collection.deleteOne({_id: ObjectId(bookid)});
+            res.send('delete successful');
+          } catch (e) {
+            console.log(e);
+            res.send('book not deleted.');
+          }
+        } else {
+          res.send('must input id');
+        }
+      });
     });
   
 };
