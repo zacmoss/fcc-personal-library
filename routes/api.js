@@ -96,7 +96,7 @@ module.exports = function (app) {
         collection.findOne({_id: ObjectId(bookid)}, function(err, doc) {
           //console.log(doc);
           if (!doc) {
-            res.send('error');
+            res.send("book doesn't exist");
           } else {
             res.send(doc);
           }

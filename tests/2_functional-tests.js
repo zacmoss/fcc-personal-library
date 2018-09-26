@@ -49,7 +49,6 @@ suite('Functional Tests', function() {
           })
           .end(function(err, res){
             assert.equal(res.status, 200);
-            assert.equal(res.body.comments, []);
             assert.equal(res.body.title, 'A Book');
             done();
           });
@@ -97,13 +96,20 @@ suite('Functional Tests', function() {
         .get('/api/books/5babf254ae0e3313a4d1b779')
         .end(function(err, res){
           assert.equal(res.status, 200);
-          assert.equal(res.text, "book doesn't ex);
+          assert.equal(res.text, "book doesn't exist");
           done();
         });
         //done();
       });
       
       test('Test GET /api/books/[id] with valid id in db',  function(done){
+        chai.request(server)
+        .get('/api/books/5babdd2c0c7df439e8c9de8e')
+        .end(function(err, res){
+          assert.equal(res.status, 200);
+          assert.equal(res.body.title, "Book 1");
+          done();
+        });
         //done();
       });
       
@@ -113,6 +119,18 @@ suite('Functional Tests', function() {
     suite('POST /api/books/[id] => add comment/expect book object with id', function(){
       
       test('Test POST /api/books/[id] with comment', function(done){
+        chai.request(server)
+          .post('/api/books/5babdd360c7df439e8c9de8f')
+          .send({
+          
+            comments: 'A Comment'
+          })
+          .end(function(err, res){
+            console.log(res.body);
+            //assert.equal(res.status, 200);
+            //assert.equal(res.text, 'Please enter book title');
+            done();
+          });
         //done();
       });
       
