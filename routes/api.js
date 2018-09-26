@@ -13,11 +13,7 @@ const MongoClient = require('mongodb').MongoClient;
 const ObjectId = require('mongodb').ObjectId;
 const MONGODB_CONNECTION_STRING = process.env.DB;
 //Example connection: MongoClient.connect(MONGODB_CONNECTION_STRING, function(err, db) {});
-/*
-const mongoose = require('mongoose');
-Promise = require('bluebird');
-mongoose.Promise = Promise;
-*/
+
 
 module.exports = function (app) {
 
@@ -51,14 +47,18 @@ module.exports = function (app) {
         let dbo = db.db("fcc-cert6-project3");
         //if (!dbo.collection('books')) dbo.createCollection('books');
         let collection = dbo.collection('books');
-        try {
-          collection.insertOne(book, function(err, doc) {
-              collection.findOne({title: book.title}, function(err, doc) {
-                res.send(doc);
-              });
-          });
-        } catch (e) {
-          console.log('error with insertion: ' + e);
+        if (book.title === '') {
+          res.send('Please enter book title');
+        } else {
+          try {
+            collection.insertOne(book, function(err, doc) {
+                collection.findOne({title: book.title}, function(err, doc) {
+                  res.send(doc);
+                });
+            });
+          } catch (e) {
+            console.log('error with insertion: ' + e);
+          }
         }
       });
     })
@@ -134,7 +134,7 @@ module.exports = function (app) {
       });
     })
     
-    // sworks
+    // works
     .delete(function(req, res){
       var bookid = req.params.id;
       //if successful response will be 'delete successful'
