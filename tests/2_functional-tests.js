@@ -52,7 +52,6 @@ suite('Functional Tests', function() {
             assert.equal(res.body.title, 'A Book');
             done();
           });
-          //done();
       });
       
       test('Test POST /api/books with no title given', function(done) {
@@ -67,7 +66,6 @@ suite('Functional Tests', function() {
             assert.equal(res.text, 'Please enter book title');
             done();
           });
-          //done();
       });
       
     });
@@ -83,7 +81,6 @@ suite('Functional Tests', function() {
             assert.isArray(res.body, 'response should be an array');
             done();
           });
-        //done();
       });      
       
     });
@@ -99,18 +96,16 @@ suite('Functional Tests', function() {
           assert.equal(res.text, "book doesn't exist");
           done();
         });
-        //done();
       });
       
       test('Test GET /api/books/[id] with valid id in db',  function(done){
         chai.request(server)
-        .get('/api/books/5babdd2c0c7df439e8c9de8e')
+        .get('/api/books/5babfacc744966435ae595aa')
         .end(function(err, res){
           assert.equal(res.status, 200);
-          assert.equal(res.body.title, "Book 1");
+          assert.equal(res.body.title, "A Book");
           done();
         });
-        //done();
       });
       
     });
@@ -120,18 +115,19 @@ suite('Functional Tests', function() {
       
       test('Test POST /api/books/[id] with comment', function(done){
         chai.request(server)
-          .post('/api/books/5babdd360c7df439e8c9de8f')
+          .post('/api/books/5babfacc744966435ae595aa')
           .send({
-          
-            comments: 'A Comment'
+            _id: '5babfacc744966435ae595aa',
+            comment: 'A Comment'
           })
           .end(function(err, res){
-            console.log(res.body);
-            //assert.equal(res.status, 200);
-            //assert.equal(res.text, 'Please enter book title');
+            //console.log(res.body);
+            let length = res.body.comments.length;
+            let target = res.body.comments[length - 1];
+            assert.equal(res.status, 200);
+            assert.equal(target, 'A Comment');
             done();
           });
-        //done();
       });
       
     });

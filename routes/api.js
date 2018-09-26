@@ -133,7 +133,7 @@ module.exports = function (app) {
         let collection = dbo.collection('books');
         
         try {
-          
+          console.log(req.body);
           collection.findOneAndUpdate(
             { _id: ObjectId(bookid) },
             { $addToSet: { comments: comment } },
