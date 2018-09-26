@@ -13,9 +13,11 @@ const MongoClient = require('mongodb').MongoClient;
 const ObjectId = require('mongodb').ObjectId;
 const MONGODB_CONNECTION_STRING = process.env.DB;
 //Example connection: MongoClient.connect(MONGODB_CONNECTION_STRING, function(err, db) {});
+/*
 const mongoose = require('mongoose');
 Promise = require('bluebird');
 mongoose.Promise = Promise;
+*/
 
 module.exports = function (app) {
 
@@ -28,6 +30,17 @@ module.exports = function (app) {
     .post(function (req, res){
       var title = req.body.title;
       //response will contain new book object including atleast _id and title
+      //console.log(title);
+      let book = {
+        title: title
+      }
+      MongoClient.connect(MONGODB_CONNECTION_STRING, { useNewUrlParser: true }, function(err, db) {
+        try {
+        db.collection.insertOne(book);
+        } catch (e) {
+          console.log('error with insertion: ' + e);
+      }
+      });
     })
     
     .delete(function(req, res){
