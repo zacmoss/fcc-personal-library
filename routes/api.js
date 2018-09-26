@@ -77,6 +77,7 @@ module.exports = function (app) {
       //json res format: {"_id": bookid, "title": book_title, "comments": [comment,comment,...]}
     })
     
+    //works
     .post(function(req, res){
       var bookid = req.params.id;
       var comment = req.body.comment;
@@ -85,28 +86,21 @@ module.exports = function (app) {
       MongoClient.connect(MONGODB_CONNECTION_STRING, { useNewUrlParser: true }, function(err, db) {
         let dbo = db.db("fcc-cert6-project3");
         let collection = dbo.collection('books');
+        
         try {
-          collection.findOneAndUpdate({_id: ObjectId(bookid)}, { $addToSet: comment });
-        } catch (e) {
-          console.log(e);
-        }
-        /*
-        try {
-          collection.findOneAndUpdate({_id: ObjectId(bookid)}, {$set: comment}, function(err, doc) {
-              res.send(doc);
-            /*
-              collection.findOne({title: 'test book 9'}, function(err, doc) {
-                console.log('works');
+          
+          collection.findOneAndUpdate(
+            { _id: ObjectId(bookid) },
+            { $addToSet: { comments: comment } },
+            function(err, doc) {
+              collection.findOne({_id: ObjectId(bookid)}, function(err, doc) {
                 res.send(doc);
               });
-              *//*
           });
           
         } catch (e) {
-          //res.send(e);
           console.log(e);
         }
-        */
       });
     })
     
