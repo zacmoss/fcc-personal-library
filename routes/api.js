@@ -22,9 +22,20 @@ mongoose.Promise = Promise;
 module.exports = function (app) {
 
   app.route('/api/books')
+  
+    //works
     .get(function (req, res){
       //response will be array of book objects
       //json res format: [{"_id": bookid, "title": book_title, "commentcount": num_of_comments },...]
+      
+      MongoClient.connect(MONGODB_CONNECTION_STRING, { useNewUrlParser: true }, function(err, db) {
+        let dbo = db.db("fcc-cert6-project3");
+        let collection = dbo.collection('books');
+        collection.find().toArray(function(err, result) {
+            res.json(result);
+          });
+      });
+    
     })
     
     // works
@@ -52,6 +63,7 @@ module.exports = function (app) {
       });
     })
     
+    // works
     .delete(function(req, res){
       //if successful response will be 'complete delete successful'
       MongoClient.connect(MONGODB_CONNECTION_STRING, { useNewUrlParser: true }, function(err, db) {
@@ -72,7 +84,7 @@ module.exports = function (app) {
 
 ///api/books/5babc6a6c442351f923b3a8c - test book 8
   app.route('/api/books/:id')
-    // should work
+    // works
     .get(function (req, res){
       var bookid = req.params.id;
       //json res format: {"_id": bookid, "title": book_title, "comments": [comment,comment,...]}
@@ -119,7 +131,7 @@ module.exports = function (app) {
       });
     })
     
-    // should work, won't test until functional tests
+    // sworks
     .delete(function(req, res){
       var bookid = req.params.id;
       //if successful response will be 'delete successful'
