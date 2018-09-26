@@ -55,7 +55,7 @@ module.exports = function (app) {
     .delete(function(req, res){
       //if successful response will be 'complete delete successful'
       MongoClient.connect(MONGODB_CONNECTION_STRING, { useNewUrlParser: true }, function(err, db) {
-        let dbo = db.db("fcc-cert6-project2");
+        let dbo = db.db("fcc-cert6-project3");
         let collection = dbo.collection('books');
 
         try {
@@ -83,20 +83,30 @@ module.exports = function (app) {
       //json res format same as .get
     
       MongoClient.connect(MONGODB_CONNECTION_STRING, { useNewUrlParser: true }, function(err, db) {
-        let dbo = db.db("fcc-cert6-project2");
+        let dbo = db.db("fcc-cert6-project3");
         let collection = dbo.collection('books');
         try {
-          collection.findOneAndUpdate({_id: ObjectId(bookid)}, {$addToSet: comment}, function(err, doc) {
-              
-              collection.find({_id: ObjectId(bookid)}, function(err, doc) {
+          collection.findOneAndUpdate({_id: ObjectId(bookid)}, { $addToSet: comment });
+        } catch (e) {
+          console.log(e);
+        }
+        /*
+        try {
+          collection.findOneAndUpdate({_id: ObjectId(bookid)}, {$set: comment}, function(err, doc) {
+              res.send(doc);
+            /*
+              collection.findOne({title: 'test book 9'}, function(err, doc) {
                 console.log('works');
                 res.send(doc);
               });
+              *//*
           });
           
         } catch (e) {
-          res.send(e);
+          //res.send(e);
+          console.log(e);
         }
+        */
       });
     })
     
@@ -104,7 +114,7 @@ module.exports = function (app) {
       var bookid = req.params.id;
       //if successful response will be 'delete successful'
       MongoClient.connect(MONGODB_CONNECTION_STRING, { useNewUrlParser: true }, function(err, db) {
-        let dbo = db.db("fcc-cert6-project2");
+        let dbo = db.db("fcc-cert6-project3");
         let collection = dbo.collection('books');
 
         if (bookid) {
