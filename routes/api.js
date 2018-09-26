@@ -87,7 +87,9 @@ module.exports = function (app) {
         let collection = dbo.collection('books');
         try {
           collection.findOneAndUpdate({_id: ObjectId(bookid)}, {$addToSet: comment}, function(err, doc) {
-              collection.findOne({title: book.title}, function(err, doc) {
+              
+              collection.find({_id: ObjectId(bookid)}, function(err, doc) {
+                console.log('works');
                 res.send(doc);
               });
           });
@@ -95,7 +97,6 @@ module.exports = function (app) {
         } catch (e) {
           res.send(e);
         }
-        //findOneAndUpdate
       });
     })
     
