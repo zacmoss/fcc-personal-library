@@ -27,6 +27,7 @@ module.exports = function (app) {
       //json res format: [{"_id": bookid, "title": book_title, "commentcount": num_of_comments },...]
     })
     
+    // works
     .post(function (req, res){
       var title = req.body.title;
       //response will contain new book object including atleast _id and title
@@ -35,10 +36,14 @@ module.exports = function (app) {
         title: title
       }
       MongoClient.connect(MONGODB_CONNECTION_STRING, { useNewUrlParser: true }, function(err, db) {
+        var dbo = db.db("fcc-cert6-project3");
+        //if (!dbo.collection('books')) dbo.createCollection('books');
+        let collection = dbo.collection('books');
         try {
-          db.collection('books').insert(book, function(err, doc) {
-              res.send(book);
-              console.log(doc);
+          collection.insertOne(book, function(err, doc) {
+              collection.findOne({title: book.title}, function(err, doc) {
+                res.send(doc);
+              });
           });
         } catch (e) {
           console.log('error with insertion: ' + e);
