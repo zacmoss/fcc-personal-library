@@ -33,7 +33,8 @@ module.exports = function (app) {
       //response will contain new book object including atleast _id and title
       //console.log(title);
       let book = {
-        title: title
+        title: title,
+        comments: []
       }
       MongoClient.connect(MONGODB_CONNECTION_STRING, { useNewUrlParser: true }, function(err, db) {
         let dbo = db.db("fcc-cert6-project3");
@@ -80,6 +81,22 @@ module.exports = function (app) {
       var bookid = req.params.id;
       var comment = req.body.comment;
       //json res format same as .get
+    
+      MongoClient.connect(MONGODB_CONNECTION_STRING, { useNewUrlParser: true }, function(err, db) {
+        let dbo = db.db("fcc-cert6-project2");
+        let collection = dbo.collection('books');
+        try {
+          collection.findOneAndUpdate({_id: ObjectId(bookid)}, {$addToSet: comment}, function(err, doc) {
+              collection.findOne({title: book.title}, function(err, doc) {
+                res.send(doc);
+              });
+          });
+          
+        } catch (e) {
+          res.send(e);
+        }
+        //findOneAndUpdate
+      });
     })
     
     .delete(function(req, res){
